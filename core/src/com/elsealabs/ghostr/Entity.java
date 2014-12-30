@@ -1,5 +1,7 @@
 package com.elsealabs.ghostr;
 
+import box2dLight.RayHandler;
+
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Sprite;
@@ -26,16 +28,18 @@ public abstract class Entity {
 	private OrthographicCamera camera;
 	private SpriteBatch batch;
 	private World world;
+	private RayHandler rayHandler;
 	
 	/** Sprite and image related objects */
 	private Sprite sprite;
 	private Texture texture;
 	
-	public Entity(SpriteBatch batch, World world, OrthographicCamera camera)
+	public Entity(SpriteBatch batch, World world, OrthographicCamera camera, RayHandler rayHandler)
 	{
 		this.setBatch(batch);
 		this.setWorld(world);
 		this.setCamera(camera);
+		this.setRayHandler(rayHandler);
 		visible = true;
 	}
 	
@@ -140,6 +144,14 @@ public abstract class Entity {
 
 	public void setCamera(OrthographicCamera camera) {
 		this.camera = camera;
+	}
+
+	public RayHandler getRayHandler() {
+		return rayHandler;
+	}
+
+	public void setRayHandler(RayHandler rayHandler) {
+		this.rayHandler = rayHandler;
 	}
 	
 }

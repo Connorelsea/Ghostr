@@ -1,5 +1,7 @@
 package com.elsealabs.ghostr;
 
+import box2dLight.RayHandler;
+
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.InputProcessor;
 import com.badlogic.gdx.graphics.GL20;
@@ -27,7 +29,9 @@ public class ScreenGame2 extends ScreenObject implements InputProcessor
 	private Box2DDebugRenderer render;
 	
 	private Sprite sprite_floor;
+	private Sprite test;
 	
+	private RayHandler rayHandler;
 	private World world;
 	
 	Vector2 startPosition, targetPosition;
@@ -70,6 +74,7 @@ public class ScreenGame2 extends ScreenObject implements InputProcessor
 		
 		/** Create Box2D related variables */
 		world = new World(new Vector2(0, 0f), true);
+		rayHandler = new RayHandler(world);
 		
 		/** Prepare scene rendering */
 		batch = new SpriteBatch();
@@ -80,8 +85,9 @@ public class ScreenGame2 extends ScreenObject implements InputProcessor
 		
 		entityManager = new EntityManager();
 		
-		entity_player = new EntityPlayer(batch, world, camera);
+		entity_player = new EntityPlayer(batch, world, camera, rayHandler);
 		entityManager.addEntity(entity_player);
+		entityManager.addEntity(new EntityGhost(batch, world, camera, rayHandler));
 		
 		Gdx.input.setInputProcessor(this);
 		
@@ -188,13 +194,13 @@ public class ScreenGame2 extends ScreenObject implements InputProcessor
 		
 		batch.setProjectionMatrix(camera.combined);
 		batch.begin();
-			//sprite_floor.setSize(50, 50);
+			sprite_floor.setSize(40, 40);
 			sprite_floor.draw(batch);
 		batch.end();
 		
 		/** Render all entities */
 		entityManager.render();
-		render.render(world, camera.combined);
+		//render.render(world, camera.combined);
 	}
 
 	@Override

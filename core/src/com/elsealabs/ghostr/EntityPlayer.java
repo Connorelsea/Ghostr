@@ -18,9 +18,9 @@ public class EntityPlayer extends Entity {
 	private ConeLight  cone;
 	private ConeLight  innerCone;
 
-	public EntityPlayer(SpriteBatch batch, World world, OrthographicCamera camera)
+	public EntityPlayer(SpriteBatch batch, World world, OrthographicCamera camera, RayHandler rayHandler)
 	{
-		super(batch, world, camera);
+		super(batch, world, camera, rayHandler);
 	}
 
 	@Override
@@ -40,13 +40,12 @@ public class EntityPlayer extends Entity {
 		
 		this.getBody().createFixture(this.getFdef());
 		
-		rayHandler = new RayHandler(this.getWorld());
-		cone = new ConeLight(rayHandler, 40, Color.GRAY, 30, 0, 0, 180, 28);
-		innerCone = new ConeLight(rayHandler, 50, Color.GRAY, 30, 0, 0, 180, 18);
+		cone = new ConeLight(getRayHandler(), 40, Color.GRAY, 30, 0, 0, 180, 28);
+		innerCone = new ConeLight(getRayHandler(), 50, Color.GRAY, 30, 0, 0, 180, 18);
 		cone.attachToBody(this.getBody());
 		innerCone.attachToBody(this.getBody());
 		
-		this.getBody().setTransform(new Vector2(10, 0), 360);
+		this.getBody().setTransform(new Vector2(10, 13), 360);
 	}
 
 	@Override
