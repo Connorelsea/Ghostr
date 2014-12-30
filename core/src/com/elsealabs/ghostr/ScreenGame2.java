@@ -8,6 +8,7 @@ import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.math.Vector2;
+import com.badlogic.gdx.math.Vector3;
 import com.badlogic.gdx.physics.box2d.Box2DDebugRenderer;
 import com.badlogic.gdx.physics.box2d.World;
 import com.badlogic.gdx.utils.viewport.ScreenViewport;
@@ -148,6 +149,33 @@ public class ScreenGame2 extends ScreenObject implements InputProcessor
 			}
 		}
 		
+		/** Touch handling */
+		
+		if (Gdx.input.isTouched())
+		{
+			Vector3 tmp = camera.unproject(new Vector3(Gdx.input.getX(), Gdx.input.getY(), 0));
+			touch_target = new Vector2(tmp.x, tmp.y);
+		}
+
+		touch_angleWant = Rot2D.fromVector(
+			touch_target.x - entity_player.getBody().getPosition().x,
+			touch_target.y - entity_player.getBody().getPosition().y
+		);
+			
+		double cross1 = Rot2D.cross(touch_angleCur, touch_angleWant);
+		
+		if (cross1 > 0.0)
+			touch_angleCur.rotate(Rot2D.fromDegrees(5.0));
+		else
+			touch_angleCur.rotate(Rot2D.fromDegrees(-5.0));
+		
+		double cross2 = Rot2D.cross(touch_angleCur, touch_angleWant);
+		
+		if (Math.signum(cross1) != Math.signum(cross2))
+			touch_angleCur.load(touch_angleWant);
+		
+		entity_player.getBody().setTransform(entity_player.getBody().getPosition(), (float) (touch_angleCur.getAngle()));
+			
 		/** Update rest */
 		
 		world.step(1/60f, 6, 2);
@@ -160,46 +188,13 @@ public class ScreenGame2 extends ScreenObject implements InputProcessor
 		
 		batch.setProjectionMatrix(camera.combined);
 		batch.begin();
-			sprite_floor.setSize(50, 50);
+			//sprite_floor.setSize(50, 50);
 			sprite_floor.draw(batch);
 		batch.end();
 		
 		/** Render all entities */
 		entityManager.render();
-
 		render.render(world, camera.combined);
-		
-		if (Gdx.input.isTouched())
-		{
-			touch_target = new Vector2(Gdx.input.getX(), Gdx.input.getY());
-			System.out.printf("[Touch] Just touched, setting new touch target.\n");
-			System.out.printf("New touch target at (%f, %f)\n", touch_target.x, touch_target.y);
-		}
-		
-		/** Touch handling */
-			touch_angleWant = Rot2D.fromVector(
-				touch_target.x - entity_player.getBody().getPosition().x,
-				touch_target.y - entity_player.getBody().getPosition().y
-			);
-			
-			System.out.printf("[Angle] touch_angleWant.getAngle() = %f\n", (float) touch_angleWant.getAngle());
-			
-			double cross1 = Rot2D.cross(touch_angleCur, touch_angleWant);
-			
-			if (cross1 > 0.0)
-				touch_angleCur.rotate(Rot2D.fromDegrees(1.0));
-			else
-				touch_angleCur.rotate(Rot2D.fromDegrees(-1.0));
-			
-			double cross2 = Rot2D.cross(touch_angleCur, touch_angleWant);
-			
-			if (Math.signum(cross1) != Math.signum(cross2))
-				touch_angleCur.load(touch_angleWant);
-			
-			System.out.printf("[Angle] touch_angleCur.getAngle() = %f\n", (float) touch_angleCur.getAngle());
-			
-			entity_player.getBody().setTransform(entity_player.getBody().getPosition(), (float) (touch_angleCur.getAngle()));
-		
 	}
 
 	@Override

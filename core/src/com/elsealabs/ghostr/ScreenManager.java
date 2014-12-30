@@ -5,6 +5,7 @@ import java.util.ArrayList;
 public class ScreenManager
 {
 	private ArrayList<ScreenObject> screens;
+	private ArrayList<String> order;
 	
 	public void addScreen(ScreenObject o)
 	{
