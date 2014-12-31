@@ -10,9 +10,12 @@ public abstract class GameObject implements ApplicationListener {
 	
 	private ScreenObject SCREEN;
 	private ArrayList<ScreenObject> SCREENS;
+	private ArrayList<String> screenOrder;
+	private int position = 0;
 	
 	public GameObject() {
 		SCREENS = new ArrayList<ScreenObject>();
+		screenOrder = new ArrayList<String>();
 	}
 	
 	public void dispose () {
@@ -48,6 +51,12 @@ public abstract class GameObject implements ApplicationListener {
 		}
 	}
 	
+	public void nextScreen()
+	{
+		setScreen(screenOrder.get(position));
+		position++;
+	}
+	
 	public void addScreen(ScreenObject so) {
 		SCREENS.add(so);
 	}
@@ -58,6 +67,14 @@ public abstract class GameObject implements ApplicationListener {
 
 	public Screen getScreen () {
 		return SCREEN;
+	}
+
+	public ArrayList<String> getScreenOrder() {
+		return screenOrder;
+	}
+
+	public void setScreenOrder(ArrayList<String> screenOrder) {
+		this.screenOrder = screenOrder;
 	}
 
 }

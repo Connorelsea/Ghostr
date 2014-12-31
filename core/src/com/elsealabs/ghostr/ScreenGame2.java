@@ -42,8 +42,8 @@ public class ScreenGame2 extends ScreenObject implements InputProcessor
 	private Vector2 lastTouch;
 	
 	/** Touch and moving handling */
-	private Vector2 touch_target = new Vector2(0, 0);
-	private Rot2D touch_angleCur = Rot2D.fromDegrees(0.0);
+	private Vector2 touch_target = new Vector2(150, 0);
+	private Rot2D touch_angleCur = Rot2D.fromDegrees(90);
 	private Rot2D touch_angleWant;
 	
 	/** Animation states and their properties */
@@ -91,6 +91,7 @@ public class ScreenGame2 extends ScreenObject implements InputProcessor
 		
 		Gdx.input.setInputProcessor(this);
 		
+		resize(Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
 		doFlicker();
 	}
 

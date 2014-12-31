@@ -42,12 +42,16 @@ public class ScreenLogo extends ScreenObject
 		
 		viewport = new FitViewport(virtualWidth, virtualHeight);
 		
-		sprites = new Sprite[1];
+		sprites = new Sprite[2];
 		
 		batch = new SpriteBatch();
 		sprites[0] = new Sprite( new Texture(Gdx.files.internal("logo.png")) );
 		sprites[0].setBounds(virtualWidth / 2 - 650 / 2, virtualHeight / 2 - 120 / 2, 650, 100);
 		sprites[0].setAlpha(0);
+		
+		sprites[1] = new Sprite( new Texture(Gdx.files.internal("music.png")) );
+		sprites[1].setBounds(virtualWidth / 2 - 650 / 2, virtualHeight / 2 - 120 / 2, 650, 100);
+		sprites[1].setAlpha(0);
 	}
 
 	@Override
@@ -57,6 +61,7 @@ public class ScreenLogo extends ScreenObject
 		
 		if (calculatingSprites)
 		{
+			
 			
 			if (in == true)
 			{
@@ -86,18 +91,17 @@ public class ScreenLogo extends ScreenObject
 			}
 			
 		}
+		else
+		{
+			done();
+		}
 		
 		Gdx.gl.glClearColor(0, 0, 0, 1);
 		Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
 		
 		batch.setProjectionMatrix(camera.combined);
 		batch.begin();
-			
-			for (int i = 0; i < sprites.length; i++)
-			{
-				sprites[0].draw(batch);
-			}
-			
+			if (calculatingSprites) sprites[currentSprite - 1].draw(batch);
 		batch.end();
 		 
 	}
