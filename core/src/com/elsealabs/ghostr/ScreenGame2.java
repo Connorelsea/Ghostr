@@ -1,4 +1,4 @@
-package com.elsealabs.ghostr;
+	package com.elsealabs.ghostr;
 
 import box2dLight.RayHandler;
 
@@ -29,7 +29,6 @@ public class ScreenGame2 extends ScreenObject implements InputProcessor
 	private Box2DDebugRenderer render;
 	
 	private Sprite sprite_floor;
-	private Sprite test;
 	
 	private RayHandler rayHandler;
 	private World world;
@@ -201,7 +200,7 @@ public class ScreenGame2 extends ScreenObject implements InputProcessor
 		
 		/** Render all entities */
 		entityManager.render();
-		//render.render(world, camera.combined);
+		render.render(world, camera.combined);
 	}
 
 	@Override

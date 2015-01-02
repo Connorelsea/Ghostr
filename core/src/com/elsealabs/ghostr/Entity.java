@@ -56,6 +56,16 @@ public abstract class Entity {
 		body = world.createBody(this.getBdef());
 	}
 	
+	/** Sprite related methods */
+	
+	public void changeSpriteTo(Sprite sprite, float sizeX, float sizeY)
+	{
+		setSprite(sprite);
+		setTexture(sprite.getTexture());
+		getSprite().setSize(sizeX, sizeY);
+		getSprite().setCenter(getBody().getPosition().x, getBody().getPosition().y);
+	}
+	
 	/** Getters and setter */
 	
 	public String getUserData() {

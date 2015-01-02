@@ -6,7 +6,6 @@ import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
-import com.badlogic.gdx.math.Interpolation;
 import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.utils.viewport.FitViewport;
 import com.badlogic.gdx.utils.viewport.Viewport;
@@ -62,11 +61,10 @@ public class ScreenLogo extends ScreenObject
 		if (calculatingSprites)
 		{
 			
-			
 			if (in == true)
 			{
 				time += Gdx.graphics.getDeltaTime();
-				float alpha = MathUtils.lerp(0, 1, time / 3f);
+				float alpha = MathUtils.lerp(0, 1, time / 5f);
 				sprites[currentSprite - 1].setAlpha(alpha);
 				
 				if (alpha >= 1)
@@ -78,7 +76,7 @@ public class ScreenLogo extends ScreenObject
 			else
 			{
 				time += Gdx.graphics.getDeltaTime();
-				float alpha = MathUtils.lerp(1, 0, time / 3f);
+				float alpha = MathUtils.lerp(1, 0, time / 5f);
 				sprites[currentSprite - 1].setAlpha(alpha);
 				
 				if (alpha <= 0)
@@ -112,28 +110,9 @@ public class ScreenLogo extends ScreenObject
 		viewport.update(width, height);
 	}
 
-	@Override
-	public void pause()
-	{
-		
-	}
-
-	@Override
-	public void resume()
-	{
-		
-	}
-
-	@Override
-	public void hide()
-	{
-		
-	}
-
-	@Override
-	public void dispose()
-	{
-		
-	}
+	public void pause() { }
+	public void resume() { }
+	public void hide() { }
+	public void dispose() { }
 
 }

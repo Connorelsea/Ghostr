@@ -6,7 +6,6 @@ import com.badlogic.gdx.audio.Music;
 public class Program extends GameObject {
 	
 	public ScreenLogo SCREEN_LOGO;
-	public ScreenMenu SCREEN_MENU;
 	public ScreenGame2 SCREEN_GAME2;
 	
 	@Override
@@ -16,15 +15,12 @@ public class Program extends GameObject {
 		music.play();
 		
 		getScreenOrder().add("SCREEN_LOGO");
-		//getScreenOrder().add("SCREEN_MENU");
 		getScreenOrder().add("SCREEN_GAME2");
 
 		SCREEN_LOGO = new ScreenLogo(this, "SCREEN_LOGO");
-		SCREEN_MENU = new ScreenMenu(this, "SCREEN_MENU");
 		SCREEN_GAME2 = new ScreenGame2(this, "SCREEN_GAME2");
 		
 		this.addScreen(SCREEN_LOGO);
-		this.addScreen(SCREEN_MENU);
 		this.addScreen(SCREEN_GAME2);
 		
 		this.nextScreen();

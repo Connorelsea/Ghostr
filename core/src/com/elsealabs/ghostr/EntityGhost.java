@@ -30,7 +30,7 @@ public class EntityGhost extends Entity {
 	{	
 		/** Define Box2D body */
 		setBdef(new BodyDef());
-		getBdef().position.set(0, 0);
+		getBdef().position.set(5, 5);
 		getBdef().type = BodyType.DynamicBody;
 		setBody(getWorld().createBody(getBdef()));
 		
@@ -44,17 +44,12 @@ public class EntityGhost extends Entity {
 		
 		getBody().createFixture(getFdef());
 		
-		getBody().setTransform(new Vector2(5, 10), 360);
-		
 		/** Define lights */
 		light = new PointLight(getRayHandler(), 30, Color.CYAN, 2, 0, 0);
 		light.attachToBody(getBody());
 		
 		/** Define Sprite */
-		setTexture(new Texture(Gdx.files.internal("ghost_cyan.png")));
-		setSprite(new Sprite(this.getTexture()));
-		this.getSprite().setSize(1.5f, 1.5f);
-		getSprite().setPosition(getBody().getPosition().x - .7f, getBody().getPosition().y - .7f);
+		changeSpriteTo(new Sprite(new Texture(Gdx.files.internal("ghost_cyan.png"))), 1.5f, 1.5f);
 	}
 
 	@Override

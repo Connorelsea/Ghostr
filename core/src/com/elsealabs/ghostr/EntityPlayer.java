@@ -42,6 +42,7 @@ public class EntityPlayer extends Entity {
 		
 		cone = new ConeLight(getRayHandler(), 40, Color.GRAY, 30, 0, 0, 180, 28);
 		innerCone = new ConeLight(getRayHandler(), 50, Color.GRAY, 30, 0, 0, 180, 18);
+		innerCone.setSoft(false);
 		cone.attachToBody(this.getBody());
 		innerCone.attachToBody(this.getBody());
 		
