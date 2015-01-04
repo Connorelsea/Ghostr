@@ -61,13 +61,13 @@ public abstract class Map
 		
 		/** Create important entities */
 		player = new EntityPlayer(batch, world, camera, rayHandler);
-		entityManager.addEntity(player);
+		//entityManager.addEntity(player);
 		
-		Filter filter = new Filter();
-		filter.categoryBits = BIT_LIGHT;
-		filter.maskBits = BIT_WALL;
+		//Filter filter = new Filter();
+		//filter.categoryBits = BIT_LIGHT;
+		//filter.maskBits = BIT_WALL;
 		
-		PointLight.setContactFilter(filter);
+		PointLight.setContactFilter(Map.BIT_LIGHT, (short) 1, Map.BIT_WALL);
 		new PointLight(rayHandler, 20, Color.BLUE, 50, -4f, -4f);
 		
 		define();
