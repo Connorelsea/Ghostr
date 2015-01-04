@@ -46,7 +46,7 @@ public class EntityPlayer extends Entity {
 		cone.attachToBody(this.getBody());
 		innerCone.attachToBody(this.getBody());
 		
-		this.getBody().setTransform(new Vector2(10, 13), 360);
+		this.getBody().setTransform(new Vector2(0, 0), 360);
 	}
 	
 	@Override

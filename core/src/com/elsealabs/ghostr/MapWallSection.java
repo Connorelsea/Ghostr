@@ -7,12 +7,13 @@ import com.badlogic.gdx.physics.box2d.PolygonShape;
 
 public class MapWallSection
 {
+	
 	/** The type of the section */
 	public enum TYPE { WALL, WINDOW, DOOR }
 	private TYPE type;
 	
 	private MapWall wall;
-	private int length;
+	private float length;
 	
 	private BodyDef bdef;
 	private Body body;
@@ -25,27 +26,17 @@ public class MapWallSection
 	 * 
 	 * @param type The type of the section
 	 */
-	public MapWallSection(MapWall wall, TYPE type /* TODO , Sprite sprite */)
+	public MapWallSection(MapWall wall, TYPE type, float length /* TODO , Sprite sprite */)
 	{
 		this.wall = wall;
 		this.type = type;
+		this.length = length;
 	}
 	
 	public void render()
 	{
 		// TODO render sprite
 		// TODO add section sprite support
-	}
-	
-	public void createBody()
-	{
-		body = wall.getWorld().createBody(bdef);
-		
-		fdef = new FixtureDef();
-		fdef.shape = shape;
-		fdef.density = 1;
-		
-		body.createFixture(fdef);
 	}
 	
 	/** Getters and setters */
@@ -98,11 +89,11 @@ public class MapWallSection
 		this.type = type;
 	}
 	
-	public int getLength() {
+	public float getLength() {
 		return length;
 	}
 
-	public void setLength(int length) {
+	public void setLength(float length) {
 		this.length = length;
 	}
 

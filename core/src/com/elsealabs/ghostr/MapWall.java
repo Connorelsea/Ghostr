@@ -5,6 +5,7 @@ import java.util.ArrayList;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.BodyDef;
 import com.badlogic.gdx.physics.box2d.BodyDef.BodyType;
+import com.badlogic.gdx.physics.box2d.FixtureDef;
 import com.badlogic.gdx.physics.box2d.PolygonShape;
 import com.badlogic.gdx.physics.box2d.World;
 
@@ -19,7 +20,7 @@ public class MapWall
 	/** Information about the wall */
 	private Vector2 position;
 	private Vector2 size;
-	private int thickness;
+	private float thickness;
 	
 	private World world;
 	
@@ -39,15 +40,13 @@ public class MapWall
 	public MapWall(
 		World world,
 		Vector2 position,
-		Vector2 size,
-		int thickness,
+		float thickness,
 		ORIENTATION orientation,
 		MapWallSection[] sections
 	) {
 		
 		this.world = world;
 		this.position = position;
-		this.size = size;
 		this.thickness = thickness;
 		this.orientation = orientation;
 		
@@ -69,29 +68,87 @@ public class MapWall
 		if (orientation == ORIENTATION.HORIZONTAL)
 		{
 			for (MapWallSection m : sections)
-			{
+			{	
+				System.out.printf("MapWallSection::HORIZONTAL::%s\n\tLength: %f\n",  m.getType().toString(), m.getLength());
+				
+				/** Create body and body related objects */
 				m.setBdef(new BodyDef());
 				m.getBdef().type = BodyType.DynamicBody;
-				m.getBdef().position.set(new Vector2(length, position.y));
+				m.getBdef().position.set(new Vector2(position.x, length + position.y));
 				
 				m.setShape(new PolygonShape());
-				m.getShape().setAsBox(m.getLength() / 2.0f, thickness);
+				m.getShape().setAsBox(thickness, m.getLength() / 2.0f);
+				length += m.getLength();
 				
-				m.createBody();
+				m.setBody(getWorld().createBody(m.getBdef()));
+				
+				m.setFdef(new FixtureDef());
+				m.getFdef().shape = m.getShape();
+				
+				m.getBody().createFixture(m.getFdef());
+				
+				/** Set category and mask bits for collision filtering */
+				
+				if (m.getType() == MapWallSection.TYPE.DOOR)
+				{
+					m.getFdef().filter.categoryBits = Map.BIT_DOOR;
+					m.getFdef().filter.maskBits     = Map.BIT_LIGHT & Map.BIT_ENTITY;
+				}
+				else if (m.getType() == MapWallSection.TYPE.WINDOW)
+				{
+					m.getFdef().filter.categoryBits = Map.BIT_DOOR;
+					m.getFdef().filter.maskBits     = Map.BIT_ENTITY;
+				}
+				else if (m.getType() == MapWallSection.TYPE.WALL)
+				{
+					m.getFdef().filter.categoryBits = Map.BIT_WALL;
+					m.getFdef().filter.maskBits     = Map.BIT_LIGHT & Map.BIT_ENTITY;
+				}
+				
 			}
 		}
 		else
 		{
 			for (MapWallSection m : sections)
 			{
+				
+				System.out.printf("MapWallSection::VERTICAL::%s\n\tLength: %f\n",  m.getType().toString(), m.getLength());
+				
+				/** Create body and body related objects */
 				m.setBdef(new BodyDef());
 				m.getBdef().type = BodyType.DynamicBody;
-				m.getBdef().position.set(new Vector2(position.x, length));
+				m.getBdef().position.set(new Vector2(length + position.x, position.y));
 				
 				m.setShape(new PolygonShape());
-				m.getShape().setAsBox(thickness, m.getLength() / 2.0f);
+				//System.out.printf("setAsBox(%f, %f)", thickness, m.getLength() / 2.0f);
+				m.getShape().setAsBox(m.getLength() / 2.0f, thickness);
+				length += m.getLength();
 				
-				m.createBody();
+				m.setBody(getWorld().createBody(m.getBdef()));
+				
+				m.setFdef(new FixtureDef());
+				m.getFdef().shape = m.getShape();
+				
+				m.getBody().createFixture(m.getFdef());
+				
+				/** Set category and mask bits for collision filtering */
+				
+				if (m.getType() == MapWallSection.TYPE.DOOR)
+				{
+					m.getFdef().filter.categoryBits = Map.BIT_DOOR;
+					m.getFdef().filter.maskBits     = Map.BIT_ENTITY;
+				}
+				else if (m.getType() == MapWallSection.TYPE.WINDOW)
+				{
+					m.getFdef().filter.categoryBits = Map.BIT_WINDOW;
+					m.getFdef().filter.maskBits     = Map.BIT_ENTITY;
+				}
+				else if (m.getType() == MapWallSection.TYPE.WALL)
+				{
+					m.getFdef().filter.categoryBits = Map.BIT_WALL;
+					m.getFdef().filter.maskBits     = Map.BIT_ENTITY | Map.BIT_LIGHT;
+				}
+				
 			}
 		}
 		

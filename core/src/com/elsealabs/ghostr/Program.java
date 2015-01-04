@@ -14,7 +14,7 @@ public class Program extends GameObject {
 	public void create() {
 		
 		Music music = Gdx.audio.newMusic(Gdx.files.internal("des.mp3"));
-		music.play();
+		//music.play();
 		
 		//getScreenOrder().add("SCREEN_LOGO");
 		getScreenOrder().add("SCREEN_MAP_TEST");
