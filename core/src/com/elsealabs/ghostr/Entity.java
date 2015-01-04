@@ -46,6 +46,7 @@ public abstract class Entity {
 	/** Abstract methods to be implemented by the child class */
 	
 	public abstract void show();
+	public abstract void update();
 	public abstract void render();
 	public abstract void dispose();
 	

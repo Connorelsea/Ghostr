@@ -8,20 +8,27 @@ public class Program extends GameObject {
 	public ScreenLogo SCREEN_LOGO;
 	public ScreenGame2 SCREEN_GAME2;
 	
+	public MapScreen SCREEN_MAP_TEST;
+	
 	@Override
 	public void create() {
 		
 		Music music = Gdx.audio.newMusic(Gdx.files.internal("des.mp3"));
 		music.play();
 		
-		getScreenOrder().add("SCREEN_LOGO");
-		getScreenOrder().add("SCREEN_GAME2");
+		//getScreenOrder().add("SCREEN_LOGO");
+		getScreenOrder().add("SCREEN_MAP_TEST");
+		//getScreenOrder().add("SCREEN_GAME2");
 
 		SCREEN_LOGO = new ScreenLogo(this, "SCREEN_LOGO");
 		SCREEN_GAME2 = new ScreenGame2(this, "SCREEN_GAME2");
 		
+		SCREEN_MAP_TEST = new MapScreen(this, "SCREEN_MAP_TEST");
+		SCREEN_MAP_TEST.setMap(new MapTest());
+		
 		this.addScreen(SCREEN_LOGO);
 		this.addScreen(SCREEN_GAME2);
+		this.addScreen(SCREEN_MAP_TEST);
 		
 		this.nextScreen();
 		

@@ -1,4 +1,4 @@
-	package com.elsealabs.ghostr;
+package com.elsealabs.ghostr;
 
 import box2dLight.RayHandler;
 

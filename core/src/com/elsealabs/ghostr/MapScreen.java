@@ -1,27 +1,43 @@
 package com.elsealabs.ghostr;
 
+import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.graphics.GL20;
+
 public class MapScreen extends ScreenObject {
 	
+	
 	private Map map;
+	private boolean hasMap = false;
 
 	public MapScreen(GameObject game, String name) {
 		super(game, name);
 	}
-
-	@Override
-	public void show() {
+	
+	public void show()
+	{
 		map.show();
+		resize(Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
 	}
 
 	@Override
 	public void render(float delta) {
-		map.render();
-		if (map.isRenderDebug()) map.getRender().render(map.getWorld(), map.getCamera().combined);
+		
+		if (hasMap)
+		{
+			map.update();
+			
+			Gdx.gl.glClearColor(1, 0, 0, 1);
+			Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
+			
+			map.render();
+			if (map.isRenderDebug()) map.getRender().render(map.getWorld(), map.getCamera().combined);
+		}
+		
 	}
 
 	@Override
 	public void resize(int width, int height) {
-		map.getViewport().update(width, height);
+		map.getViewport().update(width, height, false);
 	}
 	
 	@Override
@@ -40,6 +56,7 @@ public class MapScreen extends ScreenObject {
 	}
 
 	public void setMap(Map map) {
+		hasMap = true;
 		this.map = map;
 	}
 	

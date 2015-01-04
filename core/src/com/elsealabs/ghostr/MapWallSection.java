@@ -25,10 +25,16 @@ public class MapWallSection
 	 * 
 	 * @param type The type of the section
 	 */
-	public MapWallSection(MapWall wall, TYPE type)
+	public MapWallSection(MapWall wall, TYPE type /* TODO , Sprite sprite */)
 	{
 		this.wall = wall;
 		this.type = type;
+	}
+	
+	public void render()
+	{
+		// TODO render sprite
+		// TODO add section sprite support
 	}
 	
 	public void createBody()

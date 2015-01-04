@@ -51,6 +51,12 @@ public class EntityGhost extends Entity {
 		/** Define Sprite */
 		changeSpriteTo(new Sprite(new Texture(Gdx.files.internal("ghost_cyan.png"))), 1.5f, 1.5f);
 	}
+	
+	@Override
+	public void update()
+	{
+		//TODO move entity update code to this (refactoring) (ghost)
+	}
 
 	@Override
 	public void render()

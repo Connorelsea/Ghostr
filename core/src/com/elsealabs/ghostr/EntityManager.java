@@ -4,33 +4,33 @@ import java.util.ArrayList;
 
 public class EntityManager {
 	
-	private ArrayList<Entity> entites;
+	private ArrayList<Entity> entities;
 	
 	public EntityManager()
 	{
-		entites = new ArrayList<Entity>();
+		entities = new ArrayList<Entity>();
 	}
 	
 	public void addEntity(Entity e)
 	{
 		e.show();
-		entites.add(e);
+		entities.add(e);
 	}
 	
 	public Entity getEntity(String userData)
 	{
-		for (Entity e : entites) if (e.equals(userData)) return e;
+		for (Entity e : entities) if (e.equals(userData)) return e;
 		return null;
 	}
 	
 	public void removeEntity(Entity e)
 	{
-		entites.remove(e);
+		entities.remove(e);
 	}
 	
 	public void removeEntity(String userData)
 	{
-		for (Entity e : entites) 
+		for (Entity e : entities) 
 			if (e.equals(userData)) 
 			{
 				removeEntity(e);
@@ -41,13 +41,21 @@ public class EntityManager {
 	/** Fire all entity's show methods */
 	public void show()
 	{
-		for (Entity e : entites) e.show();
+		for (Entity e : entities) e.show();
+	}
+	
+	public void update()
+	{
+		for (Entity e : entities)
+		{
+			if (e.isVisible() == true) e.update();
+		}
 	}
 	
 	/** Fire all entity's render methods, conditionally */
 	public void render()
 	{
-		for (Entity e : entites)
+		for (Entity e : entities)
 		{
 			if (e.isVisible() == true) e.render();
 		}
@@ -56,7 +64,7 @@ public class EntityManager {
 	/** Fire all entity's dispose methods */
 	public void dispose()
 	{
-		for (Entity e : entites) e.dispose();
+		for (Entity e : entities) e.dispose();
 	}
 
 }

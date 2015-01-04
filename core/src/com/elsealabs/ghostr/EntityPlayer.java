@@ -48,6 +48,12 @@ public class EntityPlayer extends Entity {
 		
 		this.getBody().setTransform(new Vector2(10, 13), 360);
 	}
+	
+	@Override
+	public void update()
+	{
+		//TODO move entity update code to this (refactoring) (player)
+	}
 
 	@Override
 	public void render()

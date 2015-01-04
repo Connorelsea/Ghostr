@@ -57,6 +57,11 @@ public class MapWall
 		createWall();
 	}
 	
+	public void render()
+	{
+		// TODO render each section's sprite
+	}
+	
 	public void createWall()
 	{
 		int length = 0;
