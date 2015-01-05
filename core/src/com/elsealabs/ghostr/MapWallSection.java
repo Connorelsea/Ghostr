@@ -31,6 +31,26 @@ public class MapWallSection
 		this.wall = wall;
 		this.type = type;
 		this.length = length;
+		_initCollision();
+	}
+	
+	private void _initCollision()
+	{
+		fdef = new FixtureDef();
+		
+		System.out.println(type.toString());
+		
+		if (type == TYPE.DOOR || type == TYPE.WINDOW)
+		{
+			fdef.filter.categoryBits = Map.BIT_WALL_TRANS;
+			fdef.filter.maskBits     = Map.MASK_WALL_TRANS;
+		}
+		else if (type == TYPE.WALL)
+		{
+			fdef.filter.categoryBits = Map.BIT_WALL_SOLID;
+			fdef.filter.maskBits     = Map.MASK_WALL_SOLID;
+		}
+		
 	}
 	
 	public void render()

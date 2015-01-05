@@ -6,8 +6,10 @@ import box2dLight.Light;
 import box2dLight.PointLight;
 import box2dLight.RayHandler;
 
+import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.OrthographicCamera;
+import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.Box2DDebugRenderer;
@@ -34,11 +36,16 @@ public abstract class Map
 	private Entity player;
 	
 	/** Bits for collision filtering */
-	public static final short BIT_WALL   = 0x0002;
-	public static final short BIT_WINDOW = 0x0004;
-	public static final short BIT_DOOR   = 0x0008;
-	public static final short BIT_LIGHT  = 0x0010;
-	public static final short BIT_ENTITY = 0x0020;
+	public static final short BIT_WALL_SOLID = 0x0001;
+	public static final short BIT_WALL_TRANS = 0x0002;
+	public static final short BIT_LIGHT      = 0x0004;
+	public static final short BIT_ENTITY     = 0x0008;
+	
+	public static final short MASK_WALL_SOLID = BIT_LIGHT;
+	public static final short MASK_WALL_TRANS = (short) 0;
+	public static final short MASK_LIGHT      = BIT_WALL_SOLID;
+	
+	//public static final short MASK_ENTITY     = BIT_WALL_SOLID | BIT_LIGHT;
 	
 	public abstract void define();
 	
@@ -63,12 +70,12 @@ public abstract class Map
 		player = new EntityPlayer(batch, world, camera, rayHandler);
 		//entityManager.addEntity(player);
 		
-		//Filter filter = new Filter();
-		//filter.categoryBits = BIT_LIGHT;
-		//filter.maskBits = BIT_WALL;
+		Filter lightFilter = new Filter();
+		lightFilter.categoryBits = Map.BIT_LIGHT;
+		lightFilter.maskBits     = Map.MASK_LIGHT;
 		
-		PointLight.setContactFilter(Map.BIT_LIGHT, (short) 1, Map.BIT_WALL);
-		new PointLight(rayHandler, 20, Color.BLUE, 50, -4f, -4f);
+		PointLight.setContactFilter(lightFilter);
+		new PointLight(rayHandler, 20, Color.CYAN, 40, 7f, -3f);
 		
 		define();
 	}
@@ -84,6 +91,11 @@ public abstract class Map
 	{
 		//camera.position.set(player.getBody().getPosition().x, player.getBody().getPosition().y, 0);
 		camera.update();
+		
+		batch.setProjectionMatrix(camera.combined);
+		batch.begin();
+			batch.draw(new Texture(Gdx.files.internal("wood.png")), 0, 0);
+		batch.end();
 		
 		for (MapWall w : walls) w.render();
 		entityManager.render();
