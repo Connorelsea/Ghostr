@@ -3,15 +3,13 @@ package com.elsealabs.ghostr;
 import java.util.ArrayList;
 
 import box2dLight.Light;
-import box2dLight.PointLight;
 import box2dLight.RayHandler;
 
 import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.OrthographicCamera;
-import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.math.Vector2;
+import com.badlogic.gdx.math.Vector3;
 import com.badlogic.gdx.physics.box2d.Box2DDebugRenderer;
 import com.badlogic.gdx.physics.box2d.Filter;
 import com.badlogic.gdx.physics.box2d.World;
@@ -35,6 +33,12 @@ public abstract class Map
 	/** Important entities */
 	private Entity player;
 	
+	/** Touch and moving handling */
+	private Vector2 touch_prev = new Vector2(0, 0);
+	private Vector2 touch_target = new Vector2(150, 0);
+	private Rot2D touch_angleCur = Rot2D.fromDegrees(90);
+	private Rot2D touch_angleWant;
+	
 	/** Bits for collision filtering */
 	public static final short BIT_WALL_SOLID = 0x0001;
 	public static final short BIT_WALL_TRANS = 0x0002;
@@ -44,8 +48,7 @@ public abstract class Map
 	public static final short MASK_WALL_SOLID = BIT_LIGHT;
 	public static final short MASK_WALL_TRANS = (short) 0;
 	public static final short MASK_LIGHT      = BIT_WALL_SOLID;
-	
-	//public static final short MASK_ENTITY     = BIT_WALL_SOLID | BIT_LIGHT;
+	public static final short MASK_ENTITY     = BIT_WALL_SOLID | BIT_LIGHT;
 	
 	public abstract void define();
 	
@@ -68,14 +71,15 @@ public abstract class Map
 		
 		/** Create important entities */
 		player = new EntityPlayer(batch, world, camera, rayHandler);
-		//entityManager.addEntity(player);
+		entityManager.addEntity(player);
 		
 		Filter lightFilter = new Filter();
 		lightFilter.categoryBits = Map.BIT_LIGHT;
 		lightFilter.maskBits     = Map.MASK_LIGHT;
 		
-		PointLight.setContactFilter(lightFilter);
-		new PointLight(rayHandler, 20, Color.CYAN, 40, 7f, -3f);
+		Light.setContactFilter(lightFilter);
+		//new PointLight(rayHandler, 30, Color.GRAY, 10, 3f, -2.5f);
+		//new PointLight(rayHandler, 30, Color.GRAY, 10, 8f, -2.5f);
 		
 		define();
 	}
@@ -85,27 +89,65 @@ public abstract class Map
 		world.step(1/60f, 6, 2);
 		rayHandler.setCombinedMatrix(camera.combined);
 		rayHandler.update();
+		
+		_updateTouchTarget();
+		_updateMovement();
+		_updateTurn();
 	}
 
 	public void render()
 	{
-		//camera.position.set(player.getBody().getPosition().x, player.getBody().getPosition().y, 0);
+		
+		camera.position.set(player.getBody().getPosition().x, player.getBody().getPosition().y, 0);
 		camera.update();
 		
-		batch.setProjectionMatrix(camera.combined);
-		batch.begin();
-			batch.draw(new Texture(Gdx.files.internal("wood.png")), 0, 0);
-		batch.end();
-		
-		for (MapWall w : walls) w.render();
 		entityManager.render();
 		rayHandler.render();
 		if (renderDebug) render.render(world, camera.combined);
+		for (MapWall w : walls) w.render();
 	}
 	
 	public void dispose()
 	{
 		
+	}
+	
+	/** Update methods */
+	
+	private void _updateTouchTarget()
+	{
+		if (Gdx.input.isTouched())
+		{
+			Vector3 tmp = camera.unproject(new Vector3(Gdx.input.getX(), Gdx.input.getY(), 0));
+			touch_prev = touch_target;
+			touch_target = new Vector2(tmp.x, tmp.y);
+		}
+	}
+	
+	private void _updateMovement()
+	{
+
+	}
+	
+	private void _updateTurn()
+	{
+
+		touch_angleWant = Rot2D.fromVector(
+			touch_target.x - player.getBody().getPosition().x,
+			touch_target.y - player.getBody().getPosition().y
+		);
+			
+		double cross1 = Rot2D.cross(touch_angleCur, touch_angleWant);
+		
+		if (cross1 > 0.0) touch_angleCur.rotate(Rot2D.fromDegrees(6.0));
+		else touch_angleCur.rotate(Rot2D.fromDegrees(-6.0));
+		
+		double cross2 = Rot2D.cross(touch_angleCur, touch_angleWant);
+		
+		if (Math.signum(cross1) != Math.signum(cross2))
+			touch_angleCur.load(touch_angleWant);
+		
+		player.getBody().setTransform(player.getBody().getPosition(), (float) (touch_angleCur.getAngle()));
 	}
 	
 	/** Getters and setters */

@@ -1,5 +1,7 @@
 package com.elsealabs.ghostr;
 
+import com.badlogic.gdx.graphics.g2d.Sprite;
+import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.physics.box2d.Body;
 import com.badlogic.gdx.physics.box2d.BodyDef;
 import com.badlogic.gdx.physics.box2d.FixtureDef;
@@ -20,25 +22,36 @@ public class MapWallSection
 	private PolygonShape shape;
 	private FixtureDef fdef;
 	
+	private float pixelWidth;
+	private float pixelLength;
+	
+	private Sprite sprite;
+	private boolean hasSprite = false;
+	
 	/**
 	 * Constructor taking all the necessary values for creating
 	 * a section of one of the walls in the map.
 	 * 
 	 * @param type The type of the section
 	 */
-	public MapWallSection(MapWall wall, TYPE type, float length /* TODO , Sprite sprite */)
+	public MapWallSection(MapWall wall, TYPE type, float length, Sprite sprite)
 	{
 		this.wall = wall;
 		this.type = type;
 		this.length = length;
+		
+		if (sprite != null)
+		{
+			this.setSprite(sprite);
+			setHasSprite(true);
+		}
+		
 		_initCollision();
 	}
 	
 	private void _initCollision()
 	{
 		fdef = new FixtureDef();
-		
-		System.out.println(type.toString());
 		
 		if (type == TYPE.DOOR || type == TYPE.WINDOW)
 		{
@@ -53,10 +66,11 @@ public class MapWallSection
 		
 	}
 	
-	public void render()
+	public void render(SpriteBatch batch)
 	{
-		// TODO render sprite
-		// TODO add section sprite support
+		if (hasSprite()) {
+			sprite.draw(batch);
+		}
 	}
 	
 	/** Getters and setters */
@@ -115,6 +129,38 @@ public class MapWallSection
 
 	public void setLength(float length) {
 		this.length = length;
+	}
+
+	public float getPixelWidth() {
+		return pixelWidth;
+	}
+
+	public void setPixelWidth(float pixelWidth) {
+		this.pixelWidth = pixelWidth;
+	}
+
+	public float getPixelLength() {
+		return pixelLength;
+	}
+
+	public void setPixelLength(float pixelLength) {
+		this.pixelLength = pixelLength;
+	}
+
+	public Sprite getSprite() {
+		return sprite;
+	}
+
+	public void setSprite(Sprite sprite) {
+		this.sprite = sprite;
+	}
+
+	public boolean hasSprite() {
+		return hasSprite;
+	}
+
+	public void setHasSprite(boolean hasSprite) {
+		this.hasSprite = hasSprite;
 	}
 
 }

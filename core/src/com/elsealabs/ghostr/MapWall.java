@@ -22,6 +22,7 @@ public class MapWall
 	private Vector2 size;
 	private float thickness;
 	
+	private Map map;
 	private World world;
 	
 	public enum ORIENTATION { VERTICAL, HORIZONTAL }
@@ -39,13 +40,14 @@ public class MapWall
 	 * @param thickness How thick the wall should be
 	 */
 	public MapWall(
+		Map map,
 		World world,
 		Vector2 position,
 		float thickness,
 		ORIENTATION orientation,
 		MapWallSection[] sections
 	) {
-		
+		this.map = map;
 		this.world = world;
 		this.position = position;
 		this.thickness = thickness;
@@ -59,7 +61,10 @@ public class MapWall
 	
 	public void render()
 	{
-		// TODO render each section's sprite
+		map.getBatch().setProjectionMatrix(map.getCamera().combined);
+		map.getBatch().begin();
+		for (MapWallSection s : sections) s.render(map.getBatch());
+		map.getBatch().end();
 	}
 	
 	public void createWall()
@@ -74,18 +79,33 @@ public class MapWall
 			{	
 				/** Create body and body related objects */
 				m.setBdef(new BodyDef());
-				m.getBdef().type = BodyType.DynamicBody;
-				m.getBdef().position.set(position.x + m.getLength() + length, position.y + (thickness / 2));
+				m.getBdef().type = BodyType.StaticBody;
+				m.getBdef().position.set(position.x + (m.getLength() / 2) + length, position.y + (thickness / 2));
 				length += m.getLength();
 				 
 				m.setShape(new PolygonShape());
-				m.getShape().setAsBox(m.getLength(), thickness / 2);
-				length += m.getLength();
+				m.getShape().setAsBox(m.getLength() / 2, thickness / 2);
 				
 				m.setBody(getWorld().createBody(m.getBdef()));
 				
 				m.getFdef().shape = m.getShape();
 				m.getBody().createFixture(m.getFdef());
+				
+				m.setPixelWidth(m.getLength() * 32f);
+				m.setPixelLength(thickness * 32f);
+				
+				if (m.hasSprite()) {
+					m.getSprite().setPosition(m.getBdef().position.x, m.getBdef().position.y);
+					m.getSprite().setSize(m.getSprite().getWidth() / 32f, m.getSprite().getHeight() / 32f);
+					m.getSprite().setCenter(m.getBody().getPosition().x, m.getBody().getPosition().y);
+				}
+				
+				System.out.printf("HORIZONTAL::%s\n", m.getType().toString());
+				System.out.printf("\tCalculated Position: (%f, %f)\n", m.getBdef().position.x, m.getBdef().position.y);
+				System.out.printf("\tShape: (width:%f, length:%f)\n", m.getLength(), thickness);
+				System.out.printf("\tPixel Width: %f\n", m.getPixelWidth());
+				System.out.printf("\tPixel Length: %f\n", m.getPixelLength());
+				System.out.printf("\tHas Sprite: %b\n", m.hasSprite());
 			}
 		}
 		else
@@ -96,18 +116,20 @@ public class MapWall
 			{
 				/** Create body and body related objects */
 				m.setBdef(new BodyDef());
-				m.getBdef().type = BodyType.DynamicBody;
-				m.getBdef().position.set(new Vector2(position.x + (thickness / 2), position.y + m.getLength() + length));
+				m.getBdef().type = BodyType.StaticBody;
+				m.getBdef().position.set(new Vector2(position.x + (thickness / 2), position.y + (m.getLength() / 2) + length));
 				length += m.getLength();
 				 
 				m.setShape(new PolygonShape());
-				m.getShape().setAsBox(thickness / 2, m.getLength());
-				length += m.getLength();
+				m.getShape().setAsBox(thickness / 2, m.getLength() / 2);
 				
 				m.setBody(getWorld().createBody(m.getBdef()));
 				
 				m.getFdef().shape = m.getShape();
 				m.getBody().createFixture(m.getFdef());
+				
+				m.setPixelWidth(thickness * 32f);
+				m.setPixelLength(m.getLength() * 32f);
 			}
 		}
 		
