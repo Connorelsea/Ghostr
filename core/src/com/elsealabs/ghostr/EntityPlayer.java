@@ -40,8 +40,8 @@ public class EntityPlayer extends Entity {
 		
 		this.getBody().createFixture(this.getFdef());
 		
-		cone = new ConeLight(getRayHandler(), 50, Color.GRAY, 20, 0, 0, 180, 28);
-		innerCone = new ConeLight(getRayHandler(), 50, Color.GRAY, 20, 0, 0, 180, 18);
+		cone = new ConeLight(getRayHandler(), 50, Color.DARK_GRAY, 20, 0, 0, 180, 28);
+		innerCone = new ConeLight(getRayHandler(), 50, Color.DARK_GRAY, 20, 0, 0, 180, 18);
 		innerCone.setSoft(false);
 		cone.attachToBody(this.getBody());
 		innerCone.attachToBody(this.getBody());

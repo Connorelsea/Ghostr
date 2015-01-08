@@ -17,6 +17,7 @@ public class MapWallSection
 	private MapWall wall;
 	private float length;
 	
+	/** Box2D information */
 	private BodyDef bdef;
 	private Body body;
 	private PolygonShape shape;
@@ -25,8 +26,14 @@ public class MapWallSection
 	private float pixelWidth;
 	private float pixelLength;
 	
+	/** Sprite information*/
 	private Sprite sprite;
 	private boolean hasSprite = false;
+	
+	private RENDER_MODE mode = RENDER_MODE.SCALE;
+	public enum RENDER_MODE {
+		EXACT, SCALE, STRETCH_HORIZONTAL, STRETCH_VERTICAL
+	}
 	
 	/**
 	 * Constructor taking all the necessary values for creating
@@ -161,6 +168,14 @@ public class MapWallSection
 
 	public void setHasSprite(boolean hasSprite) {
 		this.hasSprite = hasSprite;
+	}
+
+	public RENDER_MODE getRenderMode() {
+		return mode;
+	}
+
+	public void setRenderMode(RENDER_MODE mode) {
+		this.mode = mode;
 	}
 
 }

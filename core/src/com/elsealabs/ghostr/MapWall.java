@@ -94,11 +94,36 @@ public class MapWall
 				m.setPixelWidth(m.getLength() * 32f);
 				m.setPixelLength(thickness * 32f);
 				
-				if (m.hasSprite()) {
+				/** Set sprite attributes */
+				
+				if (m.hasSprite())
+				{
 					m.getSprite().setPosition(m.getBdef().position.x, m.getBdef().position.y);
-					m.getSprite().setSize(m.getSprite().getWidth() / 32f, m.getSprite().getHeight() / 32f);
+					
+					switch (m.getRenderMode()) {
+					
+						default:
+						case EXACT:
+							m.getSprite().setSize(m.getSprite().getWidth() / 32f, m.getSprite().getHeight() / 32f);
+							break;
+							
+						case SCALE:
+							m.getSprite().setSize(m.getLength(), thickness);
+							break;
+							
+						case STRETCH_HORIZONTAL:
+							m.getSprite().setSize(m.getLength(), m.getSprite().getHeight() / 32f);
+							break;
+						
+						case STRETCH_VERTICAL:
+							m.getSprite().setSize(m.getSprite().getWidth() / 32f, thickness);
+							break;
+					}
+					
 					m.getSprite().setCenter(m.getBody().getPosition().x, m.getBody().getPosition().y);
 				}
+				
+				/** Print debug information */
 				
 				System.out.printf("HORIZONTAL::%s\n", m.getType().toString());
 				System.out.printf("\tCalculated Position: (%f, %f)\n", m.getBdef().position.x, m.getBdef().position.y);
@@ -130,6 +155,13 @@ public class MapWall
 				
 				m.setPixelWidth(thickness * 32f);
 				m.setPixelLength(m.getLength() * 32f);
+				
+				System.out.printf("VERTICAL::%s\n", m.getType().toString());
+				System.out.printf("\tCalculated Position: (%f, %f)\n", m.getBdef().position.x, m.getBdef().position.y);
+				System.out.printf("\tShape: (width:%f, length:%f)\n", m.getLength(), thickness);
+				System.out.printf("\tPixel Width: %f\n", m.getPixelWidth());
+				System.out.printf("\tPixel Length: %f\n", m.getPixelLength());
+				System.out.printf("\tHas Sprite: %b\n", m.hasSprite());
 			}
 		}
 		

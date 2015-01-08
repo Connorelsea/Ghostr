@@ -2,10 +2,13 @@ package com.elsealabs.ghostr;
 
 import java.util.ArrayList;
 
+import box2dLight.BlendFunc;
 import box2dLight.Light;
+import box2dLight.PointLight;
 import box2dLight.RayHandler;
 
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.math.Vector2;
@@ -63,6 +66,8 @@ public abstract class Map
 		
 		/** Create map components */
 		world = new World(new Vector2(0, 0), true);
+		
+		RayHandler.setGammaCorrection(false);
 		rayHandler = new RayHandler(world);
 		rayHandler.setCombinedMatrix(camera.combined);
 		
@@ -78,8 +83,6 @@ public abstract class Map
 		lightFilter.maskBits     = Map.MASK_LIGHT;
 		
 		Light.setContactFilter(lightFilter);
-		//new PointLight(rayHandler, 30, Color.GRAY, 10, 3f, -2.5f);
-		//new PointLight(rayHandler, 30, Color.GRAY, 10, 8f, -2.5f);
 		
 		define();
 	}
@@ -102,9 +105,10 @@ public abstract class Map
 		camera.update();
 		
 		entityManager.render();
-		rayHandler.render();
 		if (renderDebug) render.render(world, camera.combined);
 		for (MapWall w : walls) w.render();
+		
+		rayHandler.render();
 	}
 	
 	public void dispose()
