@@ -41,9 +41,8 @@ public class MapWallSection
 	 * 
 	 * @param type The type of the section
 	 */
-	public MapWallSection(MapWall wall, TYPE type, float length, Sprite sprite)
+	public MapWallSection(TYPE type, float length, Sprite sprite)
 	{
-		this.wall = wall;
 		this.type = type;
 		this.length = length;
 		

@@ -5,7 +5,6 @@ import java.util.ArrayList;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.BodyDef;
 import com.badlogic.gdx.physics.box2d.BodyDef.BodyType;
-import com.badlogic.gdx.physics.box2d.FixtureDef;
 import com.badlogic.gdx.physics.box2d.PolygonShape;
 import com.badlogic.gdx.physics.box2d.World;
 
@@ -54,7 +53,11 @@ public class MapWall
 		this.orientation = orientation;
 		
 		this.sections = new ArrayList<MapWallSection>();
-		for (MapWallSection m : sections) this.sections.add(m);
+		
+		for (MapWallSection m : sections) {
+			m.setWall(this);
+			this.sections.add(m);
+		}
 		
 		createWall();
 	}
