@@ -143,8 +143,8 @@ public abstract class Map
 			
 		double cross1 = Rot2D.cross(touch_angleCur, touch_angleWant);
 		
-		if (cross1 > 0.0) touch_angleCur.rotate(Rot2D.fromDegrees(6.0));
-		else touch_angleCur.rotate(Rot2D.fromDegrees(-6.0));
+		if (cross1 > 0.0) touch_angleCur.rotate(Rot2D.fromDegrees(10.0));
+		else touch_angleCur.rotate(Rot2D.fromDegrees(-10.0));
 		
 		double cross2 = Rot2D.cross(touch_angleCur, touch_angleWant);
 		

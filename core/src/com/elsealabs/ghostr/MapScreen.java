@@ -1,19 +1,43 @@
 package com.elsealabs.ghostr;
 
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.Input.Keys;
 import com.badlogic.gdx.graphics.GL20;
-import com.badlogic.gdx.math.Vector2;
-import com.badlogic.gdx.math.Vector3;
+import com.badlogic.gdx.graphics.g2d.BitmapFont;
+import com.elsealabs.ghostr.MapWall.ORIENTATION;
 
 public class MapScreen extends ScreenObject {
 	
 	
 	private Map map;
-	private boolean hasMap = false;
-	private boolean debug = true;
+	private boolean hasMap;
+	
+	private boolean debug;
+	
+	private enum RENDER_MODE {
+		IDLE, /** Choose to place a wall or a entity */
+		WALL_ORIENTATION, /** Choose wall orientation */
+		WALL_CREATION, /** Input the order of wall sections or place wall */
+		ENTITY
+	}
+	private RENDER_MODE renderMode;
+	
+	private BitmapFont font;
+	private ORIENTATION debugOrientation;
+	private MapWall debugWall;
 
 	public MapScreen(GameObject game, String name) {
 		super(game, name);
+		_setDefaults();
+	}
+	
+	private void _setDefaults()
+	{
+		hasMap = false;
+		debug = true;
+		renderMode = RENDER_MODE.IDLE;
+		font = new BitmapFont();
+		font.setScale(0.1f);
 	}
 	
 	public void show()
@@ -28,37 +52,6 @@ public class MapScreen extends ScreenObject {
 		if (hasMap)
 		{
 			
-			if (debug)
-			{
-				
-				System.out.println("DEBUG");
-				
-				if (Gdx.input.justTouched()) {
-					
-//					Vector3 pos = map.getCamera().unproject(new Vector3(Gdx.input.getX(), Gdx.input.getY(), 0));
-//					
-//					MapWall wall = null;
-//					
-//					MapWallSection[] wallTest_sec = {
-//							new MapWallSection(wall, MapWallSection.TYPE.WALL, 3, null),
-//							new MapWallSection(wall, MapWallSection.TYPE.WINDOW, 3, null),
-//							new MapWallSection(wall, MapWallSection.TYPE.WALL, 3, null)
-//						};
-//					
-//					map.getWalls().add(
-//						wall = new MapWall(
-//							map,
-//							map.getWorld(),
-//							new Vector2(pos.x, pos.y),
-//							2,
-//							MapWall.ORIENTATION.VERTICAL,
-//							wallTest_sec
-//						)
-//					);
-				}
-				
-			}
-			
 			map.update();
 			
 			Gdx.gl.glClearColor(0, 0, 0, 1);
@@ -66,6 +59,8 @@ public class MapScreen extends ScreenObject {
 			
 			map.render();
 			if (map.isRenderDebug()) map.getRender().render(map.getWorld(), map.getCamera().combined);
+			
+			if (debug) _doDebug();
 		}
 		
 	}
@@ -83,6 +78,45 @@ public class MapScreen extends ScreenObject {
 	public void pause() { }
 	public void resume() { }
 	public void hide() { }
+	
+	private void _doDebug()
+	{
+		
+		System.out.println("DEBUG");
+		
+		if (renderMode == RENDER_MODE.IDLE)
+		{
+			if (Gdx.input.isKeyJustPressed(Keys.W)) renderMode = RENDER_MODE.WALL_ORIENTATION;
+			if (Gdx.input.isKeyJustPressed(Keys.E)) renderMode = RENDER_MODE.ENTITY;
+		}
+		
+		if (renderMode == RENDER_MODE.WALL_ORIENTATION)
+		{
+			
+			if (Gdx.input.isKeyJustPressed(Keys.V))
+			{
+				debugOrientation = ORIENTATION.VERTICAL;
+				renderMode = RENDER_MODE.WALL_CREATION;
+			}
+			else if (Gdx.input.isKeyJustPressed(Keys.H))
+			{
+				debugOrientation = ORIENTATION.HORIZONTAL;
+				renderMode = RENDER_MODE.WALL_CREATION;
+			}
+			
+		}
+		
+		if (Gdx.input.justTouched())
+		{
+			
+			
+		}
+		
+		map.getBatch().begin();
+			font.draw(map.getBatch(), "DEBUG", 0, 10);
+		map.getBatch().end();
+		
+	}
 	
 	/** Getters and setters */
 	

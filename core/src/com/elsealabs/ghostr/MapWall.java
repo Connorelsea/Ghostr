@@ -54,7 +54,8 @@ public class MapWall
 		
 		this.sections = new ArrayList<MapWallSection>();
 		
-		for (MapWallSection m : sections) {
+		for (MapWallSection m : sections)
+		{
 			m.setWall(this);
 			this.sections.add(m);
 		}
