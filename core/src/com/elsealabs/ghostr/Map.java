@@ -9,6 +9,7 @@ import box2dLight.RayHandler;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Color;
+import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.math.Vector2;
@@ -96,19 +97,27 @@ public abstract class Map
 		_updateTouchTarget();
 		_updateMovement();
 		_updateTurn();
+		
+		camera.position.set(player.getBody().getPosition().x, player.getBody().getPosition().y, 0);
+		camera.update();
 	}
 
 	public void render()
 	{
-		
-		camera.position.set(player.getBody().getPosition().x, player.getBody().getPosition().y, 0);
-		camera.update();
+		Gdx.gl.glClearColor(0, 0, 0, 1);
+		Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
 		
 		entityManager.render();
-		if (renderDebug) render.render(world, camera.combined);
 		for (MapWall w : walls) w.render();
-		
 		rayHandler.render();
+	}
+	
+	public void renderDebug()
+	{
+		if (isRenderDebug())
+		{
+			getRender().render(world, camera.combined);
+		}
 	}
 	
 	public void dispose()
