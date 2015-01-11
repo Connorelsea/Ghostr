@@ -6,16 +6,10 @@ public class MapScreen extends ScreenObject {
 	
 	
 	private Map map;
-	private boolean hasMap;
+	private boolean hasMap = false;
 
 	public MapScreen(GameObject game, String name) {
 		super(game, name);
-		_setDefaults();
-	}
-	
-	private void _setDefaults()
-	{
-		hasMap = false;
 	}
 	
 	public void show()
@@ -31,7 +25,6 @@ public class MapScreen extends ScreenObject {
 		{			
 			map.update();
 			map.render();
-			map.renderDebug();
 		}
 		
 	}

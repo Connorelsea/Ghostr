@@ -110,6 +110,7 @@ public abstract class Map
 		entityManager.render();
 		for (MapWall w : walls) w.render();
 		rayHandler.render();
+		renderDebug();
 	}
 	
 	public void renderDebug()

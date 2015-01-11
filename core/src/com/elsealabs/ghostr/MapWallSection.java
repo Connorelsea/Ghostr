@@ -31,7 +31,9 @@ public class MapWallSection
 	private boolean hasSprite = false;
 	
 	private RENDER_MODE mode = RENDER_MODE.SCALE;
-	public enum RENDER_MODE {
+	
+	public enum RENDER_MODE
+	{
 		EXACT, SCALE, STRETCH_HORIZONTAL, STRETCH_VERTICAL
 	}
 	
@@ -45,17 +47,23 @@ public class MapWallSection
 	{
 		this.type = type;
 		this.length = length;
+		this.sprite = sprite;
 		
-		if (sprite != null)
-		{
-			this.setSprite(sprite);
-			setHasSprite(true);
-		}
-		
+		_initSprite();
 		_initCollision();
 	}
 	
-	private void _initCollision()
+	private void _initSprite()
+	{
+		if (sprite != null)
+		{
+			System.out.println("NOT NULL");
+			this.setSprite(sprite);
+			setHasSprite(true);
+		}
+	}
+	
+	public void _initCollision()
 	{
 		fdef = new FixtureDef();
 		
